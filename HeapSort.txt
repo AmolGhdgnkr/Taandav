@@ -1,0 +1,131 @@
+
+public class HeapSort {
+
+	static int [] Nums;
+	static int[] srtdArr;
+	int len;
+	static int Ctr=0;
+	int iLeft, iRight, iRoot, iLargestOfArray;
+	boolean isAnyValueSwapped = false;
+	
+	public static void main(String[] args) {
+		
+		int Nums[] = {7, 9, 11, 13, 15, 17, 19, 21,23};
+		System.out.println("Original Array: 7, 9, 11, 13, 15, 17, 19, 21, 23");	
+		
+		HeapSort objHS = new HeapSort();
+	
+		srtdArr = new int[9];
+		objHS.HeapifyMax(Nums, Nums.length);
+	
+        System.out.println("\n FINAL MAX-SORTED ARRAY:");
+        printArray(srtdArr,srtdArr.length);
+	}
+
+	public void HeapifyMax(int[] arrData, int len) {
+		
+		do {
+								System.out.println("Heapifying the Array from Bottom...");
+								
+								int i, iGreatest;
+								int StartPos  = len/2-1;
+								isAnyValueSwapped = false;
+						 	
+							 	for (i=StartPos; i>=0;i--) {
+							 		
+											 		iRoot = i;
+											 		iLeft=iRoot*2+1;
+											 		iRight=iRoot*2+2;
+												 		
+											 		System.out.println("\n	 Root: " + arrData[iRoot]);
+											 		System.out.print("Left: " + arrData[iLeft]);
+											 		
+											 		int tmp = arrData[iRoot];
+											 		
+											 		if (i==StartPos && len%2==0) {
+											 			iGreatest=GiveTheGreatest(arrData, iRoot, iLeft);
+											 		} else {
+											 			System.out.println(" Right: " + arrData[iRight]);
+											 			iGreatest=GiveTheGreatest(arrData, iRoot, iLeft, iRight);
+											 		}		
+											 		
+											 		if (iGreatest != iRoot) {
+											 			if (iGreatest == iLeft) {
+											 				arrData[iRoot] = arrData[iLeft];
+											 				arrData[iLeft] = tmp;
+											 				System.out.println("LEFT Swapped");
+											 			} else if (iGreatest == iRight) {
+											 				arrData[iRoot] = arrData[iRight];
+											 				arrData[iRight] = tmp;
+											 				System.out.println("RIGHT Swapped");
+											 			}
+											 			isAnyValueSwapped = true;
+											 		}
+											 		
+											 		System.out.println("\n");
+											 		printArray(arrData,len);	 		
+						 		
+							 	} // END of FOR.
+	 						 	
+			/* IF AT LEAST ONE OF THE VALUES IS SWAPPED...
+							 	...HEAPIFY THE ARRAY FROM THE BOTTOM AGAIN. */ 		
+							 	if (isAnyValueSwapped) { System.out.println("Some Values were Swapped. Heapifying again..."); }
+ 		} while (isAnyValueSwapped); 
+		 	
+	 	System.out.println("-------------------------------------------------------------------------------");
+	 			
+	 	// IF there is NOT even a Single Swapping of Values, Array has been completely Heapified...
+	 		if (!isAnyValueSwapped) {
+	 			System.out.println("\nNO Values Swapped.");
+	 		// Capture the Maximum Value Element reached at the Root...
+	 		iLargestOfArray = arrData[0];
+	 	/* Store it in the Resultant-Array and move the Resultant-Array's Position-Counter forward ...ready to insert the Next Max Value... */
+		 	System.out.println("\nLargest Num: " + iLargestOfArray);
+		 	srtdArr[Ctr]=iLargestOfArray;
+		 	Ctr++;
+		 	
+		 	System.out.println("Replacing Maximum Value in the Root with the LAST Element in the Array...");
+		 	System.out.println(arrData[0] + " will be replaced by " + arrData[len-1]);
+		 	arrData[0]=arrData[len-1];
+		 	printArray(arrData,len-1);
+		 	// REDUCE the Array-Length by One...
+		 	len--;
+		 	System.out.println("\nArray-Length reduced by 1 to: " + len);
+	 	}
+	 	
+	 	// As long as the Length of the Array being Heapified, is more than Zero, Heapify the COMPLETE Array again...
+	 	if (len>0) {
+	 		HeapifyMax(arrData, len);
+	 	}
+	 	
+	} // END of 'HEAPIFYMAX' Method
+	 
+	//-------------------------------------------------------------------------------------------------------------------------
+	
+	static int GiveTheGreatest(int[] arr, int root, int l, int r) {
+		int iGreatest=root;
+		
+		if (arr[l] > arr[root] && arr[l] >= arr[r]) {
+			iGreatest = l;
+		} else if (arr[r] > arr[root] && arr[r] >= arr[l]) {
+			iGreatest = r;
+		} 
+		return iGreatest;
+	}
+	
+	static int GiveTheGreatest(int[] arr, int root, int l) {
+		int iGreatest=root;
+		
+		if (arr[l] > arr[root]) {
+			iGreatest = l;
+		} 
+		return iGreatest;
+	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------
+	static void printArray(int[] arrData, int n) {
+	        for (int i=0; i<n; ++i)
+	            System.out.print(arrData[i]+" ");
+	        System.out.println();
+	    }
+}
